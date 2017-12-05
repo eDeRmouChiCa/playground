@@ -26,6 +26,7 @@ collision/margin = 0.001
 script/script = ExtResource( 1 )
 current_character = true
 player_control = true
+speed_limit = 5
 
 [node name="col" type="CollisionShape" parent="."]
 
@@ -63,7 +64,7 @@ transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.19891, 0 )
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
-[node name="camera" type="InterpolatedCamera" parent="cam base/cam target"]
+[node name="camera" type="Camera" parent="cam base/cam target"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.0936 )
@@ -77,8 +78,5 @@ visible_layers = 1048575
 environment = null
 h_offset = 0.0
 v_offset = 0.0
-target = NodePath("")
-speed = 1.0
-enabled = false
 
 

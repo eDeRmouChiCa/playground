@@ -14,7 +14,7 @@ func _fixed_process(delta):
 	
 
 var character_direction = Vector3(0,0,0)
-var previous_char_dir = character_direction
+
 func input_handler(): #todo change into own script
 	if Input.is_key_pressed(KEY_A):
 		character_direction.x = -1
@@ -28,26 +28,42 @@ func input_handler(): #todo change into own script
 		character_direction.z = 1
 	else:
 		character_direction.z = 0
-	character_direction.normalized()
-	
+	character_direction = character_direction.normalized()
 	if Input.is_key_pressed(KEY_ESCAPE):
 		get_tree().quit()
-
-onready var vp_size = get_viewport().get_rect().size #viewport size
+	
+onready var vp_size = get_viewport().get_rect().size #viewport size; todo detect screen changes and update this value
 var camera_look = Vector2(0,0)
 func _process(delta):
-	var offset = vp_size/2
-	var differency = get_viewport().get_mouse_pos() - offset
-	camera_look += differency
-	get_viewport().warp_mouse(offset)
+	var center = vp_size/2
+	camera_look = get_viewport().get_mouse_pos() - center
 	get_node(".").rotate_y(camera_look.x /300)
 	get_node("cam base").rotate_x(camera_look.y / 300)
-	
+	get_viewport().warp_mouse(center)
 	camera_look = Vector2(0,0)
+	
 
-
+var previous_char_dir = character_direction
+var direction_diff_dot = 1
+export var speed_limit = 5
+var speed_max = speed_limit
+var speed_cur = 0
+var speed_gain = .015
 func apply_character_direction():
+	direction_diff_dot = previous_char_dir.dot(character_direction)
+	print(direction_diff_dot) #dot oposite = -1, equals = 1 perpen = 0
+	if direction_diff_dot > 0.5:
+		speed_max = speed_limit * 1
+	elif direction_diff_dot > -.5:
+		speed_max = speed_limit * .5
+	else:
+		speed_max = speed_limit * 0
+	speed_cur += speed_gain
+	print(speed_cur)
+	speed_cur = clamp(speed_cur,0,speed_max)
+#	print(Vector3(0,0,1).normalized().dot(Vector3(1,1,0).normalized())) #dot oposite = -1, equals = 1 perpen = 0
+	previous_char_dir = character_direction
 	var cam_base = get_node("cam base") 
 	var cam_heigh_offset = Vector3(0,3.19891,0)
-	cam_base.set_translation(character_direction * .1 + cam_heigh_offset)
-	translate(character_direction * .1)
+#	cam_base.set_translation(character_direction * .1 + cam_heigh_offset)
+	translate(character_direction * .1 * speed_cur)
