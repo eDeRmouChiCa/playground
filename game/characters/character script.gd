@@ -14,6 +14,7 @@ func _fixed_process(delta):
 	
 
 var character_direction = Vector3(0,0,0)
+var previous_char_dir = character_direction
 func input_handler(): #todo change into own script
 	if Input.is_key_pressed(KEY_A):
 		character_direction.x = -1
@@ -46,4 +47,7 @@ func _process(delta):
 
 
 func apply_character_direction():
+	var cam_base = get_node("cam base") 
+	var cam_heigh_offset = Vector3(0,3.19891,0)
+	cam_base.set_translation(character_direction * .1 + cam_heigh_offset)
 	translate(character_direction * .1)
