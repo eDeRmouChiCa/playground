@@ -1,38 +1,35 @@
 [gd_scene load_steps=7 format=1]
 
 [ext_resource path="res://characters/character script.gd" type="Script" id=1]
+[ext_resource path="res://gui/battle camera.gd" type="Script" id=2]
 
 [sub_resource type="PlaneShape" id=1]
 
 plane = Plane( 0, 1, 0, 0 )
 
-[sub_resource type="NavigationMesh" id=4]
+[sub_resource type="NavigationMesh" id=2]
 
 vertices = Vector3Array(  )
 polygons = [  ]
 
-[sub_resource type="BoxShape" id=2]
+[sub_resource type="BoxShape" id=3]
 
 extents = Vector3( 1, 1, 1 )
 
-[sub_resource type="CapsuleShape" id=3]
+[sub_resource type="CapsuleShape" id=4]
 
 radius = 0.56
 height = 1.78
-
-[sub_resource type="Mesh" id=5]
-
-custom_aabb/custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
 
 [node name="scene" type="Node"]
 
 [node name="world" type="Spatial" parent="."]
 
-editor/display_folded = true
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
 [node name="static" type="Spatial" parent="world"]
 
+editor/display_folded = true
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
 [node name="plane" type="StaticBody" parent="world/static"]
@@ -86,11 +83,12 @@ up_vector = Vector3( 0, 1, 0 )
 [node name="NavigationMeshInstance" type="NavigationMeshInstance" parent="world/static/navmesh"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-navmesh = SubResource( 4 )
+navmesh = SubResource( 2 )
 enabled = true
 
 [node name="dynamic" type="Spatial" parent="world"]
 
+editor/display_folded = true
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
 [node name="test box" type="RigidBody" parent="world/dynamic"]
@@ -100,7 +98,7 @@ transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.99316, 4.41828, 0 )
 input/ray_pickable = true
 input/capture_on_drag = false
 shape_count = 1
-shapes/0/shape = SubResource( 2 )
+shapes/0/shape = SubResource( 3 )
 shapes/0/transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 shapes/0/trigger = false
 collision/layers = 1
@@ -143,7 +141,7 @@ geometry/baked_light_tex_id = 0
 [node name="cube" type="CollisionShape" parent="world/dynamic/test box"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 trigger = false
 _update_shape_index = 0
 
@@ -181,15 +179,18 @@ shadow/zoffset_scale = 2.0
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
-[node name="char" type="KinematicBody" parent="."]
+[node name="chars" type="Spatial" parent="world/logic"]
 
-editor/display_folded = true
+_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+
+[node name="char" type="KinematicBody" parent="world/logic/chars"]
+
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.26965, 0, 0 )
 input/ray_pickable = true
 input/capture_on_drag = false
 shape_count = 1
-shapes/0/shape = SubResource( 3 )
+shapes/0/shape = SubResource( 4 )
 shapes/0/transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 1.51033, 0 )
 shapes/0/trigger = false
 collision/layers = 1
@@ -203,35 +204,15 @@ script/script = ExtResource( 1 )
 current_character = true
 player_control = true
 
-[node name="CollisionShape" type="CollisionShape" parent="char"]
+[node name="col" type="CollisionShape" parent="world/logic/chars/char"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 transform/local = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 1.51033, 0 )
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 trigger = false
 _update_shape_index = 0
 
-[node name="MeshInstance" type="MeshInstance" parent="char"]
-
-_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-layers = 1
-geometry/visible = true
-geometry/material_override = null
-geometry/cast_shadow = 1
-geometry/receive_shadows = true
-geometry/range_begin = 0.0
-geometry/range_end = 0.0
-geometry/extra_cull_margin = 0.0
-geometry/billboard = false
-geometry/billboard_y = false
-geometry/depth_scale = false
-geometry/visible_in_all_rooms = false
-geometry/use_baked_light = false
-geometry/baked_light_tex_id = 0
-mesh/mesh = SubResource( 5 )
-mesh/skeleton = NodePath("..")
-
-[node name="TestCube" type="TestCube" parent="char"]
+[node name="ren" type="TestCube" parent="world/logic/chars/char"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 transform/local = Transform( 0.538688, 0, 0, 0, 1.3, 0, 0, 0, 0.538688, 0, 1.6, 0 )
@@ -250,10 +231,24 @@ geometry/visible_in_all_rooms = false
 geometry/use_baked_light = false
 geometry/baked_light_tex_id = 0
 
-[node name="camera" type="Camera" parent="."]
+[node name="cam base x" type="Spatial" parent="world/logic/chars/char"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.54565, 7.06561 )
+
+[node name="cam base y" type="Spatial" parent="world/logic/chars/char/cam base x"]
+
+_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.19891, 0 )
+
+[node name="cam target" type="Spatial" parent="world/logic/chars/char/cam base x/cam base y"]
+
+_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.62939, 0, 0 )
+
+[node name="camera" type="Camera" parent="world/logic/chars/char/cam base x/cam base y/cam target"]
+
+_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+transform/local = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0, 0, 0 )
 projection = 0
 fov = 65.0
 near = 0.1
@@ -264,5 +259,7 @@ visible_layers = 1048575
 environment = null
 h_offset = 0.0
 v_offset = 0.0
+script/script = ExtResource( 2 )
+mode = 0
 
 
