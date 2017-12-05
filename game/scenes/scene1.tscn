@@ -177,16 +177,18 @@ shadow/zoffset_scale = 2.0
 
 [node name="logic" type="Spatial" parent="world"]
 
+editor/display_folded = true
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
 [node name="chars" type="Spatial" parent="world/logic"]
 
+editor/display_folded = true
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
 [node name="char" type="KinematicBody" parent="world/logic/chars"]
 
+editor/display_folded = true
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.26965, 0, 0 )
 input/ray_pickable = true
 input/capture_on_drag = false
 shape_count = 1
@@ -231,24 +233,19 @@ geometry/visible_in_all_rooms = false
 geometry/use_baked_light = false
 geometry/baked_light_tex_id = 0
 
-[node name="cam base x" type="Spatial" parent="world/logic/chars/char"]
+[node name="cam base" type="Spatial" parent="world/logic/chars/char"]
 
-_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-
-[node name="cam base y" type="Spatial" parent="world/logic/chars/char/cam base x"]
-
+editor/display_folded = true
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.19891, 0 )
 
-[node name="cam target" type="Spatial" parent="world/logic/chars/char/cam base x/cam base y"]
+[node name="cam target" type="Spatial" parent="world/logic/chars/char/cam base"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.62939, 0, 0 )
 
-[node name="camera" type="Camera" parent="world/logic/chars/char/cam base x/cam base y/cam target"]
+[node name="camera" type="InterpolatedCamera" parent="world/logic/chars/char/cam base/cam target"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0, 0, 0 )
 projection = 0
 fov = 65.0
 near = 0.1
@@ -259,6 +256,9 @@ visible_layers = 1048575
 environment = null
 h_offset = 0.0
 v_offset = 0.0
+target = NodePath("..")
+speed = 1.0
+enabled = false
 script/script = ExtResource( 2 )
 mode = 0
 
