@@ -11,7 +11,6 @@ func _fixed_process(delta):
 		if player_control == true:
 			input_handler()
 			apply_character_direction()
-	look_at(Vector3(0,0,0),Vector3(0,1,0))
 	
 
 var character_direction = Vector3(0,0,0)
@@ -40,11 +39,11 @@ func _process(delta):
 	var differency = get_viewport().get_mouse_pos() - offset
 	camera_look += differency
 	get_viewport().warp_mouse(offset)
-	get_node("cam base x").rotate_y(camera_look.x / 300)
-	get_node("cam base x/cam base y").rotate_z(camera_look.y /300)
+	get_node(".").rotate_y(camera_look.x /300)
+	get_node("cam base").rotate_x(camera_look.y / 300)
 	
 	camera_look = Vector2(0,0)
 
 
 func apply_character_direction():
-	move(character_direction * .1)
+	translate(character_direction * .1)

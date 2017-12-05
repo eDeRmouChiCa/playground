@@ -1,7 +1,6 @@
-[gd_scene load_steps=7 format=1]
+[gd_scene load_steps=5 format=1]
 
-[ext_resource path="res://characters/character script.gd" type="Script" id=1]
-[ext_resource path="res://gui/battle camera.gd" type="Script" id=2]
+[ext_resource path="res://characters/def char.tscn" type="PackedScene" id=1]
 
 [sub_resource type="PlaneShape" id=1]
 
@@ -15,11 +14,6 @@ polygons = [  ]
 [sub_resource type="BoxShape" id=3]
 
 extents = Vector3( 1, 1, 1 )
-
-[sub_resource type="CapsuleShape" id=4]
-
-radius = 0.56
-height = 1.78
 
 [node name="scene" type="Node"]
 
@@ -177,89 +171,12 @@ shadow/zoffset_scale = 2.0
 
 [node name="logic" type="Spatial" parent="world"]
 
-editor/display_folded = true
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
 [node name="chars" type="Spatial" parent="world/logic"]
 
-editor/display_folded = true
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
-[node name="char" type="KinematicBody" parent="world/logic/chars"]
-
-editor/display_folded = true
-_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-input/ray_pickable = true
-input/capture_on_drag = false
-shape_count = 1
-shapes/0/shape = SubResource( 4 )
-shapes/0/transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 1.51033, 0 )
-shapes/0/trigger = false
-collision/layers = 1
-collision/mask = 1
-collide_with/static = true
-collide_with/kinematic = true
-collide_with/rigid = true
-collide_with/character = true
-collision/margin = 0.001
-script/script = ExtResource( 1 )
-current_character = true
-player_control = true
-
-[node name="col" type="CollisionShape" parent="world/logic/chars/char"]
-
-_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 1.51033, 0 )
-shape = SubResource( 4 )
-trigger = false
-_update_shape_index = 0
-
-[node name="ren" type="TestCube" parent="world/logic/chars/char"]
-
-_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 0.538688, 0, 0, 0, 1.3, 0, 0, 0, 0.538688, 0, 1.6, 0 )
-layers = 1
-geometry/visible = true
-geometry/material_override = null
-geometry/cast_shadow = 1
-geometry/receive_shadows = true
-geometry/range_begin = 0.0
-geometry/range_end = 0.0
-geometry/extra_cull_margin = 0.0
-geometry/billboard = false
-geometry/billboard_y = false
-geometry/depth_scale = false
-geometry/visible_in_all_rooms = false
-geometry/use_baked_light = false
-geometry/baked_light_tex_id = 0
-
-[node name="cam base" type="Spatial" parent="world/logic/chars/char"]
-
-editor/display_folded = true
-_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.19891, 0 )
-
-[node name="cam target" type="Spatial" parent="world/logic/chars/char/cam base"]
-
-_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-
-[node name="camera" type="InterpolatedCamera" parent="world/logic/chars/char/cam base/cam target"]
-
-_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-projection = 0
-fov = 65.0
-near = 0.1
-far = 100.0
-keep_aspect = 1
-current = true
-visible_layers = 1048575
-environment = null
-h_offset = 0.0
-v_offset = 0.0
-target = NodePath("..")
-speed = 1.0
-enabled = false
-script/script = ExtResource( 2 )
-mode = 0
+[node name="char" parent="world/logic/chars" instance=ExtResource( 1 )]
 
 
