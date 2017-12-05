@@ -1,22 +1,34 @@
-[gd_scene load_steps=4 format=1]
+[gd_scene load_steps=7 format=1]
+
+[ext_resource path="res://characters/character script.gd" type="Script" id=1]
 
 [sub_resource type="PlaneShape" id=1]
 
 plane = Plane( 0, 1, 0, 0 )
 
-[sub_resource type="BoxShape" id=3]
+[sub_resource type="NavigationMesh" id=4]
+
+vertices = Vector3Array(  )
+polygons = [  ]
+
+[sub_resource type="BoxShape" id=2]
 
 extents = Vector3( 1, 1, 1 )
 
-[sub_resource type="CapsuleShape" id=2]
+[sub_resource type="CapsuleShape" id=3]
 
 radius = 0.56
 height = 1.78
+
+[sub_resource type="Mesh" id=5]
+
+custom_aabb/custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
 
 [node name="scene" type="Node"]
 
 [node name="world" type="Spatial" parent="."]
 
+editor/display_folded = true
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
 [node name="static" type="Spatial" parent="world"]
@@ -25,7 +37,6 @@ _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
 [node name="plane" type="StaticBody" parent="world/static"]
 
-editor/display_folded = true
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 input/ray_pickable = true
 input/capture_on_drag = false
@@ -50,6 +61,7 @@ _update_shape_index = 0
 [node name="TestCube" type="TestCube" parent="world/static/plane"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+transform/local = Transform( 10, 0, 0, 0, 1, 0, 0, 0, 10, 0, -1, 0 )
 layers = 1
 geometry/visible = true
 geometry/material_override = null
@@ -65,19 +77,30 @@ geometry/visible_in_all_rooms = false
 geometry/use_baked_light = false
 geometry/baked_light_tex_id = 0
 
+[node name="navmesh" type="Navigation" parent="world/static"]
+
+editor/display_folded = true
+_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+up_vector = Vector3( 0, 1, 0 )
+
+[node name="NavigationMeshInstance" type="NavigationMeshInstance" parent="world/static/navmesh"]
+
+_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+navmesh = SubResource( 4 )
+enabled = true
+
 [node name="dynamic" type="Spatial" parent="world"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
 [node name="test box" type="RigidBody" parent="world/dynamic"]
 
-editor/display_folded = true
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.99316, 3.45789, 0 )
+transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.99316, 4.41828, 0 )
 input/ray_pickable = true
 input/capture_on_drag = false
 shape_count = 1
-shapes/0/shape = SubResource( 3 )
+shapes/0/shape = SubResource( 2 )
 shapes/0/transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 shapes/0/trigger = false
 collision/layers = 1
@@ -120,18 +143,53 @@ geometry/baked_light_tex_id = 0
 [node name="cube" type="CollisionShape" parent="world/dynamic/test box"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-shape = SubResource( 3 )
+shape = SubResource( 2 )
 trigger = false
 _update_shape_index = 0
+
+[node name="lights" type="Spatial" parent="world"]
+
+editor/display_folded = true
+_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.153, 0 )
+
+[node name="DirectionalLight" type="DirectionalLight" parent="world/lights"]
+
+_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+transform/local = Transform( 1, 0, 0, 0, 0.533753, 0.845641, 0, -0.845641, 0.533753, 0, 0, 0 )
+layers = 1
+params/enabled = true
+params/editor_only = false
+params/bake_mode = 0
+params/energy = 1.0
+colors/diffuse = Color( 1, 1, 1, 1 )
+colors/specular = Color( 1, 1, 1, 1 )
+shadow/shadow = false
+shadow/darkening = 0.0
+shadow/z_offset = 0.05
+shadow/z_slope_scale = 0.0
+shadow/esm_multiplier = 60.0
+shadow/blur_passes = 1.0
+projector = null
+operator = 0
+shadow/mode = 0
+shadow/max_distance = 0.0
+shadow/split_weight = 0.5
+shadow/zoffset_scale = 2.0
+
+[node name="logic" type="Spatial" parent="world"]
+
+_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
 [node name="char" type="KinematicBody" parent="."]
 
 editor/display_folded = true
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.26965, 0, 0 )
 input/ray_pickable = true
 input/capture_on_drag = false
 shape_count = 1
-shapes/0/shape = SubResource( 2 )
+shapes/0/shape = SubResource( 3 )
 shapes/0/transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 1.51033, 0 )
 shapes/0/trigger = false
 collision/layers = 1
@@ -141,14 +199,56 @@ collide_with/kinematic = true
 collide_with/rigid = true
 collide_with/character = true
 collision/margin = 0.001
+script/script = ExtResource( 1 )
+current_character = true
+player_control = true
 
 [node name="CollisionShape" type="CollisionShape" parent="char"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 transform/local = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 1.51033, 0 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 trigger = false
 _update_shape_index = 0
+
+[node name="MeshInstance" type="MeshInstance" parent="char"]
+
+_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+layers = 1
+geometry/visible = true
+geometry/material_override = null
+geometry/cast_shadow = 1
+geometry/receive_shadows = true
+geometry/range_begin = 0.0
+geometry/range_end = 0.0
+geometry/extra_cull_margin = 0.0
+geometry/billboard = false
+geometry/billboard_y = false
+geometry/depth_scale = false
+geometry/visible_in_all_rooms = false
+geometry/use_baked_light = false
+geometry/baked_light_tex_id = 0
+mesh/mesh = SubResource( 5 )
+mesh/skeleton = NodePath("..")
+
+[node name="TestCube" type="TestCube" parent="char"]
+
+_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+transform/local = Transform( 0.538688, 0, 0, 0, 1.3, 0, 0, 0, 0.538688, 0, 1.6, 0 )
+layers = 1
+geometry/visible = true
+geometry/material_override = null
+geometry/cast_shadow = 1
+geometry/receive_shadows = true
+geometry/range_begin = 0.0
+geometry/range_end = 0.0
+geometry/extra_cull_margin = 0.0
+geometry/billboard = false
+geometry/billboard_y = false
+geometry/depth_scale = false
+geometry/visible_in_all_rooms = false
+geometry/use_baked_light = false
+geometry/baked_light_tex_id = 0
 
 [node name="camera" type="Camera" parent="."]
 
