@@ -34,13 +34,19 @@ func input_handler(): #todo change into own script
 	
 onready var vp_size = get_viewport().get_rect().size #viewport size; todo detect screen changes and update this value
 var camera_look = Vector2(0,0)
+var camera_speed = 0
 func _process(delta):
 	var center = vp_size/2
-	camera_look = get_viewport().get_mouse_pos() - center
-	get_node(".").rotate_y(camera_look.x /300)
-	get_node("cam base").rotate_x(camera_look.y / 300)
-	get_viewport().warp_mouse(center)
+#	camera_look += ((get_viewport().get_mouse_pos() - center)/1000)
+	var cursor_pos = get_viewport().get_mouse_pos()
+	var cursor_dif = (cursor_pos - center)
+	print (cursor_dif)
+	if cursor_dif.abs() > cursor_dif.normalized().abs() * 100:
+		Input.warp_mouse_pos(center + cursor_dif.normalized() * 100)
+#	get_node(".").rotate_y(camera_look.x)
+#	get_node("cam base").rotate_x(camera_look.y)
 	camera_look = Vector2(0,0)
+	Viewport
 	
 
 var previous_char_dir = character_direction
@@ -51,7 +57,7 @@ var speed_cur = 0
 var speed_gain = .015
 func apply_character_direction():
 	direction_diff_dot = previous_char_dir.dot(character_direction)
-	print(direction_diff_dot) #dot oposite = -1, equals = 1 perpen = 0
+#	print(direction_diff_dot) #dot oposite = -1, equals = 1 perpen = 0
 	if direction_diff_dot > 0.5:
 		speed_max = speed_limit * 1
 	elif direction_diff_dot > -.5:
@@ -59,7 +65,7 @@ func apply_character_direction():
 	else:
 		speed_max = speed_limit * 0
 	speed_cur += speed_gain
-	print(speed_cur)
+#	print(speed_cur)
 	speed_cur = clamp(speed_cur,0,speed_max)
 #	print(Vector3(0,0,1).normalized().dot(Vector3(1,1,0).normalized())) #dot oposite = -1, equals = 1 perpen = 0
 	previous_char_dir = character_direction
