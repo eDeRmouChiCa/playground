@@ -32,17 +32,16 @@ func input_handler(): #todo change into own script
 	if Input.is_key_pressed(KEY_ESCAPE):
 		get_tree().quit()
 	
-onready var vp_size = get_viewport().get_rect().size #viewport size; todo detect screen changes and update this value
 var camera_look = Vector2(0,0)
 var camera_speed = 0
 func _process(delta):
+	var vp_size = get_viewport().get_rect().size #viewport size; todo detect screen changes and update this value
 	var center = vp_size/2
 #	camera_look += ((get_viewport().get_mouse_pos() - center)/1000)
 	var cursor_pos = get_viewport().get_mouse_pos()
 	var cursor_dif = (cursor_pos - center)
+	
 	print (cursor_dif)
-	if cursor_dif.abs() > cursor_dif.normalized().abs() * 100:
-		Input.warp_mouse_pos(center + cursor_dif.normalized() * 100)
 #	get_node(".").rotate_y(camera_look.x)
 #	get_node("cam base").rotate_x(camera_look.y)
 	camera_look = Vector2(0,0)
