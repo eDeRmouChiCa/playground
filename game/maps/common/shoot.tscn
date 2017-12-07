@@ -13,10 +13,10 @@ input/ray_pickable = true
 input/capture_on_drag = false
 shape_count = 1
 shapes/0/shape = SubResource( 1 )
-shapes/0/transform = Transform( 0.0240019, 0, 0, 0, 0.0240019, 0, 0, 0, 0.0240019, 0, 0, 0 )
+shapes/0/transform = Transform( 0.163013, 0, 0, 0, 0.163013, 0, 0, 0, 0.163013, 0, 0, 0 )
 shapes/0/trigger = false
-collision/layers = 1
-collision/mask = 1
+collision/layers = 0
+collision/mask = 7
 mode = 0
 mass = 1.0
 friction = 1.0
@@ -35,10 +35,17 @@ damp_override/linear = -1.0
 damp_override/angular = -1.0
 script/script = ExtResource( 1 )
 
-[node name="TestCube" type="TestCube" parent="."]
+[node name="cube" type="CollisionShape" parent="."]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 0.0240019, 0, 0, 0, 0.0240019, 0, 0, 0, 0.0240019, 0, 0, 0 )
+transform/local = Transform( 0.163013, 0, 0, 0, 0.163013, 0, 0, 0, 0.163013, 0, 0, 0 )
+shape = SubResource( 1 )
+trigger = false
+_update_shape_index = 0
+
+[node name="TestCube" type="TestCube" parent="cube"]
+
+_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 layers = 1
 geometry/visible = true
 geometry/material_override = null
@@ -53,13 +60,5 @@ geometry/depth_scale = false
 geometry/visible_in_all_rooms = false
 geometry/use_baked_light = false
 geometry/baked_light_tex_id = 0
-
-[node name="cube" type="CollisionShape" parent="."]
-
-_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 0.0240019, 0, 0, 0, 0.0240019, 0, 0, 0, 0.0240019, 0, 0, 0 )
-shape = SubResource( 1 )
-trigger = false
-_update_shape_index = 0
 
 

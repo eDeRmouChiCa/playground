@@ -1,8 +1,7 @@
-[gd_scene load_steps=6 format=1]
+[gd_scene load_steps=5 format=1]
 
-[ext_resource path="res://maps/common/test box.tscn" type="PackedScene" id=1]
-[ext_resource path="res://characters/def char.tscn" type="PackedScene" id=2]
-[ext_resource path="res://maps/playground.gd" type="Script" id=3]
+[ext_resource path="res://characters/def char.tscn" type="PackedScene" id=1]
+[ext_resource path="res://maps/playground.gd" type="Script" id=2]
 
 [sub_resource type="PlaneShape" id=1]
 
@@ -80,12 +79,7 @@ enabled = true
 
 [node name="dynamic" type="Spatial" parent="world"]
 
-editor/display_folded = true
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-
-[node name="test box" parent="world/dynamic" instance=ExtResource( 1 )]
-
-transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.31848, 1, 0 )
 
 [node name="lights" type="Spatial" parent="world"]
 
@@ -125,12 +119,12 @@ _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
-[node name="char" parent="world/logic/chars" instance=ExtResource( 2 )]
+[node name="char" parent="world/logic/chars" instance=ExtResource( 1 )]
 
 transform/local = Transform( 0.246239, 0, 0.969209, 0, 1, 0, -0.969209, 0, 0.246239, 1.97206, 0, -4.67879 )
 speed_limit = 35
 
-[node name="char1" parent="world/logic/chars" instance=ExtResource( 2 )]
+[node name="char1" parent="world/logic/chars" instance=ExtResource( 1 )]
 
 transform/local = Transform( 0.900485, 0, 0.434888, 0, 1, 0, -0.434888, 0, 0.900485, 1.97206, 0, -4.67879 )
 speed_limit = 35
@@ -138,6 +132,6 @@ speed_limit = 35
 [node name="playground" type="Spatial" parent="world/logic"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-script/script = ExtResource( 3 )
+script/script = ExtResource( 2 )
 
 

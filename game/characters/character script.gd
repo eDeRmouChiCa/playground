@@ -55,11 +55,21 @@ func camera_look():
 	var vp_size = get_viewport().get_rect().size #viewport size; todo detect screen changes and update this value
 	var center = vp_size/2
 	var cursor_pos = get_viewport().get_mouse_pos()
-	var cursor_dif = (cursor_pos - center)
+	var cursor_dif = (cursor_pos - center).normalized() * 2
+	var key_dif = Vector2(0,0)
+	if Input.is_key_pressed(KEY_LEFT):
+		key_dif.x = -1
+	elif Input.is_key_pressed(KEY_RIGHT):
+		key_dif.x = 1
+	if Input.is_key_pressed(KEY_UP):
+		key_dif.y = -1
+	elif Input.is_key_pressed(KEY_DOWN):
+		key_dif.y = 1
+
 #	#cursor_dif = vector2_slowdown(cursor_dif, 13)
 #	cursor_dif = vector2_slowdown(cursor_dif, 3)
-	get_node(".").rotate_y(sign(cursor_dif.x) * .1)
-	get_node("cam base").rotate_x(cursor_dif.y * .003)
+	get_node(".").rotate_y(deg2rad((cursor_dif.x + key_dif.x)))
+	get_node("cam base").rotate_x(deg2rad(cursor_dif.y + key_dif.y))
 	Input.warp_mouse_pos(center)
 
 func vector2_slowdown(vector2, magnitude): #linear slow down #todo squared and easing
