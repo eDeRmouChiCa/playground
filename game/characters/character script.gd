@@ -39,25 +39,28 @@ func _process(delta):
 	var center = vp_size/2
 	var cursor_pos = get_viewport().get_mouse_pos()
 	var cursor_dif = (cursor_pos - center)
-	print (delta)
+	if cursor_dif.abs() > cursor_dif.abs().normalized() * 20:
+		cursor_dif = cursor_dif.normalized() * 20
 	if cursor_dif.x != 0:
-		print (" ", cursor_dif.x)
 		if cursor_dif.x < -1:
 			cursor_dif.x += 1
 		elif cursor_dif.x > 1:
 			cursor_dif.x -= 1
 		else:
 			cursor_dif.x = 0
-		print (cursor_dif.x)
+	if cursor_dif.y != 0:
+		print (" ", cursor_dif.y)
+		if cursor_dif.y < -1:
+			cursor_dif.y += 1
+		elif cursor_dif.y > 1:
+			cursor_dif.y -= 1
+		else:
+			cursor_dif.y = 0
 
-#	if cursor_dif.y != 0:
-#		cursor_dif.y -= cursor_dif.y * .1
-#		if abs(cursor_dif.y) < .11:
-#			cursor_dif.y = 0
-#	camera_last += cursor_dif
+
 	Input.warp_mouse_pos(center + cursor_dif)
-	get_node(".").rotate_y(cursor_dif.x * .00100)
-#	get_node("cam base").rotate_x(camera_look.y)
+	get_node(".").rotate_y(cursor_dif.x * .005)
+	get_node("cam base").rotate_x(cursor_dif.y * .005)
 
 var previous_char_dir = character_direction
 var direction_diff_dot = 1
