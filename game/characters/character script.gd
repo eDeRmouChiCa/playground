@@ -108,4 +108,4 @@ func apply_character_direction():
 	current_character_direction = vector3_slowdown(current_character_direction,speed_limit)
 	print (current_character_direction)
 	previous_char_dir = character_direction
-	translate(current_character_direction * .005)
+	translate(current_character_direction * .007)
