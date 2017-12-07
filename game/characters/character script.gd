@@ -4,6 +4,7 @@ export var player_control = true
 func _ready():
 	set_fixed_process(true)
 	set_process(true)
+	Input.warp_mouse_pos(get_viewport().get_rect().size / 2)
 	
 var direction
 func _fixed_process(delta):
@@ -14,7 +15,6 @@ func _fixed_process(delta):
 	
 
 var character_direction = Vector3(0,0,0)
-
 func input_handler(): #todo change into own script
 	if Input.is_key_pressed(KEY_A):
 		character_direction.x = -1
@@ -31,32 +31,33 @@ func input_handler(): #todo change into own script
 	character_direction = character_direction.normalized()
 	if Input.is_key_pressed(KEY_ESCAPE):
 		get_tree().quit()
-	
+
 var camera_speed = 0
 var camera_last = Vector2(0,0)
 func _process(delta):
 	var vp_size = get_viewport().get_rect().size #viewport size; todo detect screen changes and update this value
 	var center = vp_size/2
-#	camera_look += ((get_viewport().get_mouse_pos() - center)/1000)
 	var cursor_pos = get_viewport().get_mouse_pos()
 	var cursor_dif = (cursor_pos - center)
-	if cursor_dif.abs() > cursor_dif.normalized().abs() * 100:
-		camera_speed = 100
-	else:
-		if camera_speed > 0:
-			camera_speed -= 1
-		
-	camera_speed = clamp(camera_speed,0,100)
-	
-	cursor_dif = cursor_dif.normalized() * camera_speed
+	print (delta)
+	if cursor_dif.x != 0:
+		print (" ", cursor_dif.x)
+		if cursor_dif.x < -1:
+			cursor_dif.x += 1
+		elif cursor_dif.x > 1:
+			cursor_dif.x -= 1
+		else:
+			cursor_dif.x = 0
+		print (cursor_dif.x)
+
+#	if cursor_dif.y != 0:
+#		cursor_dif.y -= cursor_dif.y * .1
+#		if abs(cursor_dif.y) < .11:
+#			cursor_dif.y = 0
+#	camera_last += cursor_dif
 	Input.warp_mouse_pos(center + cursor_dif)
-	
-	print (cursor_dif)
-	print (camera_speed)
-#	get_node(".").rotate_y(camera_look.x)
+	get_node(".").rotate_y(cursor_dif.x * .00100)
 #	get_node("cam base").rotate_x(camera_look.y)
-	camera_last = cursor_dif
-	
 
 var previous_char_dir = character_direction
 var direction_diff_dot = 1
