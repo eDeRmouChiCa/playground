@@ -39,28 +39,30 @@ func _process(delta):
 	var center = vp_size/2
 	var cursor_pos = get_viewport().get_mouse_pos()
 	var cursor_dif = (cursor_pos - center)
-	if cursor_dif.abs() > cursor_dif.abs().normalized() * 20:
-		cursor_dif = cursor_dif.normalized() * 20
-	if cursor_dif.x != 0:
-		if cursor_dif.x < -1:
-			cursor_dif.x += 1
-		elif cursor_dif.x > 1:
-			cursor_dif.x -= 1
-		else:
-			cursor_dif.x = 0
-	if cursor_dif.y != 0:
-		print (" ", cursor_dif.y)
-		if cursor_dif.y < -1:
-			cursor_dif.y += 1
-		elif cursor_dif.y > 1:
-			cursor_dif.y -= 1
-		else:
-			cursor_dif.y = 0
-
-
+	cursor_dif = vector2_slowdown(cursor_dif, 13)
 	Input.warp_mouse_pos(center + cursor_dif)
 	get_node(".").rotate_y(cursor_dif.x * .005)
 	get_node("cam base").rotate_x(cursor_dif.y * .005)
+
+func vector2_slowdown(vector2, magnitude): #linear slow down #todo squared and easing
+	if vector2.abs() > vector2.abs().normalized() * magnitude:
+		vector2 = vector2.normalized() * magnitude
+	if vector2.x != 0:
+		if vector2.x < -1:
+			vector2.x += 1
+		elif vector2.x > 1:
+			vector2.x -= 1
+		else:
+			vector2.x = 0
+	if vector2.y != 0:
+		print (" ", vector2.y)
+		if vector2.y < -1:
+			vector2.y += 1
+		elif vector2.y > 1:
+			vector2.y -= 1
+		else:
+			vector2.y = 0
+	return vector2
 
 var previous_char_dir = character_direction
 var direction_diff_dot = 1
