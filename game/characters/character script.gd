@@ -32,6 +32,7 @@ func input_handler(): #todo change into own script
 	if Input.is_key_pressed(KEY_ESCAPE):
 		get_tree().quit()
 
+
 var camera_speed = 0
 var camera_last = Vector2(0,0)
 func _process(delta):
@@ -55,7 +56,6 @@ func vector2_slowdown(vector2, magnitude): #linear slow down #todo squared and e
 		else:
 			vector2.x = 0
 	if vector2.y != 0:
-		print (" ", vector2.y)
 		if vector2.y < -1:
 			vector2.y += 1
 		elif vector2.y > 1:
@@ -63,28 +63,49 @@ func vector2_slowdown(vector2, magnitude): #linear slow down #todo squared and e
 		else:
 			vector2.y = 0
 	return vector2
+func vector3_slowdown(vector3, magnitude): #linear slow down #todo squared and easing
+	if vector3.abs() > vector3.abs().normalized() * magnitude:
+		vector3 = vector3.normalized() * magnitude
+	if vector3.x != 0:
+		if vector3.x < -1:
+			vector3.x += 1
+		elif vector3.x > 1:
+			vector3.x -= 1
+		else:
+			vector3.x = 0
+	if vector3.y != 0:
+		if vector3.y < -1:
+			vector3.y += 1
+		elif vector3.y > 1:
+			vector3.y -= 1
+		else:
+			vector3.y = 0
+	if vector3.z != 0:
+		if vector3.z < -1:
+			vector3.z += 1
+		elif vector3.z > 1:
+			vector3.z -= 1
+		else:
+			vector3.z = 0
+	return vector3
 
 var previous_char_dir = character_direction
+var current_character_direction = Vector3(0,0,0)
 var direction_diff_dot = 1
-export var speed_limit = 5
+export var speed_limit = 35
 var speed_max = speed_limit
 var speed_cur = 0
 var speed_gain = .015
 func apply_character_direction():
 	direction_diff_dot = previous_char_dir.dot(character_direction)
-#	print(direction_diff_dot) #dot oposite = -1, equals = 1 perpen = 0
 	if direction_diff_dot > 0.5:
-		speed_max = speed_limit * 1
+		speed_max += 1
 	elif direction_diff_dot > -.5:
-		speed_max = speed_limit * .5
+		speed_max += 0.5
 	else:
-		speed_max = speed_limit * 0
-	speed_cur += speed_gain
-#	print(speed_cur)
-	speed_cur = clamp(speed_cur,0,speed_max)
-#	print(Vector3(0,0,1).normalized().dot(Vector3(1,1,0).normalized())) #dot oposite = -1, equals = 1 perpen = 0
+		speed_max = 0
+	current_character_direction += character_direction * speed_limit
+	current_character_direction = vector3_slowdown(current_character_direction,speed_limit)
+	print (current_character_direction)
 	previous_char_dir = character_direction
-	var cam_base = get_node("cam base") 
-	var cam_heigh_offset = Vector3(0,3.19891,0)
-#	cam_base.set_translation(character_direction * .1 + cam_heigh_offset)
-	translate(character_direction * .1 * speed_cur)
+	translate(current_character_direction * .005)

@@ -180,9 +180,11 @@ _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 [node name="char" parent="world/logic/chars" instance=ExtResource( 1 )]
 
 transform/local = Transform( 0.643232, 0, 0.765671, 0, 1, 0, -0.765671, 0, 0.643232, 0, 0, 0 )
+speed_limit = 35
 
 [node name="char1" parent="world/logic/chars" instance=ExtResource( 1 )]
 
 transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.33284, 0, 0 )
+speed_limit = 35
 
 
