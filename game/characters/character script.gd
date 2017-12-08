@@ -8,6 +8,7 @@ func _ready():
 	
 var direction
 func _fixed_process(delta):
+	get_node("cam base/cam target/camera/cpu").set_text(str(1/delta))
 	if current_character == true:
 		if player_control == true:
 			input_handler()
@@ -29,6 +30,10 @@ func input_handler(): #todo change into own script
 	else:
 		character_direction.z = 0
 	character_direction = character_direction.normalized()
+	
+	if Input.is_mouse_button_pressed(1):
+		get_node("../../").get_node("playground").shoot(get_node("cam base/cam target").get_global_transform())
+	camera_look()
 	if Input.is_key_pressed(KEY_ESCAPE):
 		get_tree().quit()
 
@@ -36,14 +41,38 @@ func input_handler(): #todo change into own script
 var camera_speed = 0
 var camera_last = Vector2(0,0)
 func _process(delta):
+	get_node("cam base/cam target/camera/gpu").set_text(str(1/delta))
+	pass
+#	var vp_size = get_viewport().get_rect().size #viewport size; todo detect screen changes and update this value
+#	var center = vp_size/2
+#	var cursor_pos = get_viewport().get_mouse_pos()
+#	var cursor_dif = (cursor_pos - center)
+#	#cursor_dif = vector2_slowdown(cursor_dif, 13)
+#	cursor_dif = vector2_slowdown(cursor_dif, 3)
+#	Input.warp_mouse_pos(center + cursor_dif)
+#	get_node(".").rotate_y(cursor_dif.x * .03)
+#	get_node("cam base").rotate_x(cursor_dif.y * .03)
+
+func camera_look():
 	var vp_size = get_viewport().get_rect().size #viewport size; todo detect screen changes and update this value
 	var center = vp_size/2
 	var cursor_pos = get_viewport().get_mouse_pos()
-	var cursor_dif = (cursor_pos - center)
-	cursor_dif = vector2_slowdown(cursor_dif, 13)
-	Input.warp_mouse_pos(center + cursor_dif)
-	get_node(".").rotate_y(cursor_dif.x * .005)
-	get_node("cam base").rotate_x(cursor_dif.y * .005)
+	var cursor_dif = (cursor_pos - center).normalized() * 2
+	var key_dif = Vector2(0,0)
+	if Input.is_key_pressed(KEY_LEFT):
+		key_dif.x = -1
+	elif Input.is_key_pressed(KEY_RIGHT):
+		key_dif.x = 1
+	if Input.is_key_pressed(KEY_UP):
+		key_dif.y = -1
+	elif Input.is_key_pressed(KEY_DOWN):
+		key_dif.y = 1
+
+#	#cursor_dif = vector2_slowdown(cursor_dif, 13)
+#	cursor_dif = vector2_slowdown(cursor_dif, 3)
+	get_node(".").rotate_y(deg2rad((cursor_dif.x + key_dif.x)))
+	get_node("cam base").rotate_x(deg2rad(cursor_dif.y + key_dif.y))
+	Input.warp_mouse_pos(center)
 
 func vector2_slowdown(vector2, magnitude): #linear slow down #todo squared and easing
 	if vector2.abs() > vector2.abs().normalized() * magnitude:
@@ -106,6 +135,5 @@ func apply_character_direction():
 		speed_max = 0
 	current_character_direction += character_direction * speed_limit
 	current_character_direction = vector3_slowdown(current_character_direction,speed_limit)
-	print (current_character_direction)
 	previous_char_dir = character_direction
-	translate(current_character_direction * .005)
+	translate(current_character_direction * .007)
