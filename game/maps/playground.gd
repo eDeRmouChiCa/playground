@@ -8,7 +8,7 @@ var shoot = preload("res://maps/common/shoot.tscn")
 func shoot(transform):
 	last_transform = transform
 	add_child(shoot.instance(false))
-	print ("shoot")
+
 var test = preload("res://maps/common/test box.tscn")
 func test_box(transform):
 	last_transform = transform

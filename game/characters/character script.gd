@@ -8,6 +8,7 @@ func _ready():
 	
 var direction
 func _fixed_process(delta):
+	get_node("cam base/cam target/camera/cpu").set_text(str(1/delta))
 	if current_character == true:
 		if player_control == true:
 			input_handler()
@@ -40,6 +41,7 @@ func input_handler(): #todo change into own script
 var camera_speed = 0
 var camera_last = Vector2(0,0)
 func _process(delta):
+	get_node("cam base/cam target/camera/gpu").set_text(str(1/delta))
 	pass
 #	var vp_size = get_viewport().get_rect().size #viewport size; todo detect screen changes and update this value
 #	var center = vp_size/2
