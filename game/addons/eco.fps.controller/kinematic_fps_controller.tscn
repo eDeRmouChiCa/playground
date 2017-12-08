@@ -11,7 +11,9 @@ height = 0.8
 
 length = 0.4
 
-[node name="actor" type="KinematicBody" groups=[ "player" ]]
+[node name="actor" type="KinematicBody" groups=[
+"player",
+]]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 input/ray_pickable = true
@@ -28,21 +30,23 @@ collide_with/rigid = true
 collide_with/character = true
 collision/margin = 0.001
 script/script = ExtResource( 1 )
-__meta__ = { "__editor_plugin_screen__":"3D" }
+__meta__ = {
+"__editor_plugin_screen__": "3D"
+}
 active = true
 leg_length = 0.4
 body_radius = 0.6
 body_height = 0.8
 camera_height = 1.7
 action_range = 2
-action_forward = "ui_up"
-action_backward = "ui_down"
-action_left = "ui_left"
-action_right = "ui_right"
-action_attack = "ui_action1"
-action_jump = "ui_jump"
-action_use = "ui_select"
-action_reload = "ui_reload"
+action_forward = "char_front"
+action_backward = "char_back"
+action_left = "char_left"
+action_right = "char_right"
+action_attack = "char_fire"
+action_jump = "char_jump"
+action_use = "char_use"
+action_reload = "char_reload"
 ACCEL = 2
 DEACCEL = 4
 FLY_SPEED = 100

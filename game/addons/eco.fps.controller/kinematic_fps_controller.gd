@@ -46,14 +46,14 @@ export(float) var camera_height=1.7 setget _set_camera_height
 export(float) var action_range=2 setget _set_action_range
 
 ## actions
-export(String) var action_forward="ui_up"
-export(String) var action_backward="ui_down"
-export(String) var action_left="ui_left"
-export(String) var action_right="ui_right"
-export(String) var action_attack="ui_action1"
-export(String) var action_jump="ui_jump"
-export(String) var action_use="ui_select"
-export(String) var action_reload="ui_reload"
+export(String) var action_forward="char_front"
+export(String) var action_backward="char_back"
+export(String) var action_left="char_left"
+export(String) var action_right="char_right"
+export(String) var action_attack="char_fire"
+export(String) var action_jump="char_jump"
+export(String) var action_use="char_use"
+export(String) var action_reload="char_reload"
 
 ## physics
 export(float) var ACCEL= 2
@@ -358,28 +358,29 @@ func _walk(delta):
 func _get_floor_velocity(ray,delta):
 	var floor_velocity=Vector3()
 	# only static or rigid bodies are considered as floor. If the character is on top of another character, he can be ignored.
-	var object = ray.get_collider()
-	if object extends RigidBody or object extends StaticBody:
-		var point = ray.get_collision_point() - object.get_translation()
-		var floor_angular_vel = Vector3()
-		# get the floor velocity and rotation depending on the kind of floor
-		if object extends RigidBody:
-			floor_velocity = object.get_linear_velocity()
-			floor_angular_vel = object.get_angular_velocity()
-		elif object extends StaticBody:
-			floor_velocity = object.get_constant_linear_velocity()
-			floor_angular_vel = object.get_constant_angular_velocity()
-		# if there's an angular velocity, the floor velocity take it in account too.
-		if(floor_angular_vel.length()>0):
-			var transform = Matrix3(Vector3(1, 0, 0), floor_angular_vel.x)
-			transform = transform.rotated(Vector3(0, 1, 0), floor_angular_vel.y)
-			transform = transform.rotated(Vector3(0, 0, 1), floor_angular_vel.z)
-			floor_velocity += transform.xform_inv(point) - point
-			
-			# if the floor has an angular velocity (rotation force), the character must rotate too.
-			yaw = fmod(yaw + rad2deg(floor_angular_vel.y) * delta, 360)
-			get_node("eco_yaw").set_rotation(Vector3(0, deg2rad(yaw), 0))
-	return floor_velocity
+#	var object = ray.get_collider()
+#	if object extends RigidBody or object extends StaticBody:
+#		var point = ray.get_collision_point() - object.get_translation()
+#		var floor_angular_vel = Vector3()
+#		# get the floor velocity and rotation depending on the kind of floor
+#		if object extends RigidBody:
+#			floor_velocity = object.get_linear_velocity()
+#			floor_angular_vel = object.get_angular_velocity()
+#		elif object extends StaticBody:
+#			floor_velocity = object.get_constant_linear_velocity()
+#			floor_angular_vel = object.get_constant_angular_velocity()
+#		# if there's an angular velocity, the floor velocity take it in account too.
+#		if(floor_angular_vel.length()>0):
+#			var transform = Matrix3(Vector3(1, 0, 0), floor_angular_vel.x)
+#			transform = transform.rotated(Vector3(0, 1, 0), floor_angular_vel.y)
+#			transform = transform.rotated(Vector3(0, 0, 1), floor_angular_vel.z)
+#			floor_velocity += transform.xform_inv(point) - point
+#			
+#			# if the floor has an angular velocity (rotation force), the character must rotate too.
+#			yaw = fmod(yaw + rad2deg(floor_angular_vel.y) * delta, 360)
+#			get_node("eco_yaw").set_rotation(Vector3(0, deg2rad(yaw), 0))
+	return Vector3(0,0,0)
+#	return floor_velocity
 
 
 func _on_ladders_body_enter( body ):

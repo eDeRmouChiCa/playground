@@ -32,7 +32,8 @@ func input_handler(): #todo change into own script
 	character_direction = character_direction.normalized()
 	
 	if Input.is_mouse_button_pressed(1):
-		get_node("../../").get_node("playground").shoot(get_node("cam base/cam target").get_global_transform())
+#		get_node("../../").get_node("playground").shoot(get_node("cam base/cam target").get_global_transform())
+		get_node("../../").get_node("playground").shoot(get_node("../").get_global_transform())
 	camera_look()
 	if Input.is_key_pressed(KEY_ESCAPE):
 		get_tree().quit()
@@ -43,15 +44,6 @@ var camera_last = Vector2(0,0)
 func _process(delta):
 	get_node("cam base/cam target/camera/gpu").set_text(str(1/delta))
 	pass
-#	var vp_size = get_viewport().get_rect().size #viewport size; todo detect screen changes and update this value
-#	var center = vp_size/2
-#	var cursor_pos = get_viewport().get_mouse_pos()
-#	var cursor_dif = (cursor_pos - center)
-#	#cursor_dif = vector2_slowdown(cursor_dif, 13)
-#	cursor_dif = vector2_slowdown(cursor_dif, 3)
-#	Input.warp_mouse_pos(center + cursor_dif)
-#	get_node(".").rotate_y(cursor_dif.x * .03)
-#	get_node("cam base").rotate_x(cursor_dif.y * .03)
 
 func camera_look():
 	var vp_size = get_viewport().get_rect().size #viewport size; todo detect screen changes and update this value
@@ -67,9 +59,7 @@ func camera_look():
 		key_dif.y = -1
 	elif Input.is_key_pressed(KEY_DOWN):
 		key_dif.y = 1
-
-#	#cursor_dif = vector2_slowdown(cursor_dif, 13)
-#	cursor_dif = vector2_slowdown(cursor_dif, 3)
+	
 	get_node(".").rotate_y(deg2rad((cursor_dif.x + key_dif.x)))
 	get_node("cam base").rotate_x(deg2rad(cursor_dif.y + key_dif.y))
 	Input.warp_mouse_pos(center)
