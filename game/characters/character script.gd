@@ -1,129 +1,135 @@
-extends KinematicBody
-export var current_character = true
-export var player_control = true
+extends RigidBody
+
+export(bool) var active_char=false
+
+var _is_loaded = false
+
+	#keyboar actions
+var action_forward="char_front"
+var action_backward="char_back"
+var action_left="char_left"
+var action_right="char_right"
+#var action_jump="char_jump"
+var action_fire="char_fire"
+var action_reload="char_reload"
+#var action_use="char_use"
+
+export (int) var status_max_hp = 100
+var status_cur_hp = status_max_hp
+
+export (int) var weapon_magazine = 30
+export (float) var weapon_rate_of_fire = .05
+export (float) var weapon_reload_speed = 20.0
+export (int) var weapon_range = 20
+export (int) var weapon_damage = 100
+
+###############################################################################
+
 func _ready():
+	_is_loaded = true
+	
+	pass
+func action_start():
 	set_fixed_process(true)
-	set_process(true)
-	Input.warp_mouse_pos(get_viewport().get_rect().size / 2)
+	active_char = selected
+	active_char(active_char)
 	
-var direction
+func action_end():
+	set_fixed_process(false)
+	active_char = false
+	active_char(active_char)
+	pass
 func _fixed_process(delta):
-	get_node("cam base/cam target/camera/cpu").set_text(str(1/delta))
-	if current_character == true:
-		if player_control == true:
-			input_handler()
-			apply_character_direction()
-	
-
-var character_direction = Vector3(0,0,0)
-func input_handler(): #todo change into own script
-	if Input.is_key_pressed(KEY_A):
-		character_direction.x = -1
-	elif Input.is_key_pressed(KEY_D):
-		character_direction.x = 1
+	update_gui()
+	if active_char:
+		char_movement(delta)
+		fire += .05
+		if fire >= 1:
+			if Input.is_action_pressed("char_fire"):
+				shoot()
+				fire = 0
 	else:
-		character_direction.x = 0
-	if Input.is_key_pressed(KEY_W):
-		character_direction.z = -1
-	elif Input.is_key_pressed(KEY_S):
-		character_direction.z = 1
-	else:
-		character_direction.z = 0
-	character_direction = character_direction.normalized()
+		char_turret()
 	
-	if Input.is_mouse_button_pressed(1):
-#		get_node("../../").get_node("playground").shoot(get_node("cam base/cam target").get_global_transform())
-		get_node("../../").get_node("playground").shoot(get_node("../").get_global_transform())
-	camera_look()
-	if Input.is_key_pressed(KEY_ESCAPE):
-		get_tree().quit()
-
-
-var camera_speed = 0
-var camera_last = Vector2(0,0)
-func _process(delta):
-	get_node("cam base/cam target/camera/gpu").set_text(str(1/delta))
 	pass
 
-func camera_look():
-	var vp_size = get_viewport().get_rect().size #viewport size; todo detect screen changes and update this value
-	var center = vp_size/2
-	var cursor_pos = get_viewport().get_mouse_pos()
-	var cursor_dif = (cursor_pos - center).normalized() * 2
-	var key_dif = Vector2(0,0)
-	if Input.is_key_pressed(KEY_LEFT):
-		key_dif.x = -1
-	elif Input.is_key_pressed(KEY_RIGHT):
-		key_dif.x = 1
-	if Input.is_key_pressed(KEY_UP):
-		key_dif.y = -1
-	elif Input.is_key_pressed(KEY_DOWN):
-		key_dif.y = 1
-	
-	get_node(".").rotate_y(deg2rad((cursor_dif.x + key_dif.x)))
-	get_node("cam base").rotate_x(deg2rad(cursor_dif.y + key_dif.y))
-	Input.warp_mouse_pos(center)
+var selected = false
+func _mouse_enter():
+	selected = true
+func _mouse_exit():
+	selected = false
 
-func vector2_slowdown(vector2, magnitude): #linear slow down #todo squared and easing
-	if vector2.abs() > vector2.abs().normalized() * magnitude:
-		vector2 = vector2.normalized() * magnitude
-	if vector2.x != 0:
-		if vector2.x < -1:
-			vector2.x += 1
-		elif vector2.x > 1:
-			vector2.x -= 1
-		else:
-			vector2.x = 0
-	if vector2.y != 0:
-		if vector2.y < -1:
-			vector2.y += 1
-		elif vector2.y > 1:
-			vector2.y -= 1
-		else:
-			vector2.y = 0
-	return vector2
-func vector3_slowdown(vector3, magnitude): #linear slow down #todo squared and easing
-	if vector3.abs() > vector3.abs().normalized() * magnitude:
-		vector3 = vector3.normalized() * magnitude
-	if vector3.x != 0:
-		if vector3.x < -1:
-			vector3.x += 1
-		elif vector3.x > 1:
-			vector3.x -= 1
-		else:
-			vector3.x = 0
-	if vector3.y != 0:
-		if vector3.y < -1:
-			vector3.y += 1
-		elif vector3.y > 1:
-			vector3.y -= 1
-		else:
-			vector3.y = 0
-	if vector3.z != 0:
-		if vector3.z < -1:
-			vector3.z += 1
-		elif vector3.z > 1:
-			vector3.z -= 1
-		else:
-			vector3.z = 0
-	return vector3
-
-var previous_char_dir = character_direction
-var current_character_direction = Vector3(0,0,0)
-var direction_diff_dot = 1
-export var speed_limit = 35
-var speed_max = speed_limit
-var speed_cur = 0
-var speed_gain = .015
-func apply_character_direction():
-	direction_diff_dot = previous_char_dir.dot(character_direction)
-	if direction_diff_dot > 0.5:
-		speed_max += 1
-	elif direction_diff_dot > -.5:
-		speed_max += 0.5
+var yaw = 0
+var pitch = 0
+export(float) var view_sensitivity = 0.3
+func _input(event):
+	if event.type == InputEvent.MOUSE_MOTION:
+		yaw = fmod(yaw - event.relative_x * view_sensitivity, 360)
+		pitch = max(min(pitch - event.relative_y * view_sensitivity, 89), -89)
+		get_node("cam yaw").set_rotation(Vector3(0, deg2rad(yaw), 0))
+		get_node("cam yaw/cam support").set_rotation(Vector3(deg2rad(pitch), 0, 0))
+		
+		var length = (-pitch + 90)/9
+		var ray = get_node("cam yaw/cam support/cam distance")
+		ray.set_cast_to(Vector3(0,0,length))
+		if ray.is_colliding():
+			var ray_col_dif = ray.get_collision_point() - ray.get_global_transform().origin
+			length = ray_col_dif.length()
+		var camera = get_node("cam yaw/cam support/camera")
+		camera.set_translation(Vector3(0,0,length))
+		
+	pass
+func char_movement(delta):
+	#get camera rotation and input, then walk in relative direction
+	var aim = get_node("cam yaw/cam support").get_global_transform().basis
+	var direction = Vector3()
+	if Input.is_action_pressed(action_forward):
+		direction -= aim[2]
+#		direction.z -= 1
+	if Input.is_action_pressed(action_backward):
+		direction += aim[2]
+#		direction.z += 1
+	if Input.is_action_pressed(action_left):
+		direction -= aim[0]
+#		direction.x -= 1
+	if Input.is_action_pressed(action_right):
+		direction += aim[0]
+#		direction.x += 1
+	direction.y = 0
+	direction=direction.normalized()
+	translate(direction/4)
+	pass
+var target = self #get set by logic.gd
+var fire = 0
+func char_turret():
+	fire += weapon_rate_of_fire
+	if fire >= 1:
+		shoot()
+		fire = 0
+	var look_at = target.get_transform().origin
+	look_at.y = 0
+	look_at(look_at,Vector3(0,1,0))
+	pass
+func shoot():
+	get_node("../../playground").shoot(get_node("cam yaw/cam support/shoot ray").get_global_transform())
+	pass
+func active_char(active):
+	if active == true:
+		set_process_input(true)
+		get_node("cam yaw/cam support/camera").make_current()
 	else:
-		speed_max = 0
-	current_character_direction += character_direction * speed_limit
-	current_character_direction = vector3_slowdown(current_character_direction,speed_limit)
-	previous_char_dir = character_direction
-	translate(current_character_direction * .007)
+		set_process_input(false)
+		get_node("cam yaw/cam support/camera").clear_current()
+		pass
+func update_gui():
+	var self_hp = get_node("cam yaw/cam support/camera/self hp")
+	self_hp.set_max(status_max_hp)
+	self_hp.set_val(status_cur_hp)
+	var other_hp = get_node("cam yaw/cam support/camera/other hp")
+	var shoot_ray = get_node("cam yaw/cam support/shoot ray")
+	if shoot_ray.is_colliding():
+		var aimed_char = shoot_ray.get_collider()
+		if aimed_char.is_in_group("char"):
+			print(aimed_char.status_cur_hp)
+			other_hp.set_max(aimed_char.status_max_hp)
+			other_hp.set_val(aimed_char.status_cur_hp)
