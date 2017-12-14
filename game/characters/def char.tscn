@@ -1,11 +1,12 @@
-[gd_scene load_steps=3 format=1]
+[gd_scene load_steps=4 format=1]
 
 [ext_resource path="res://characters/character script.gd" type="Script" id=1]
+[ext_resource path="res://characters/female body 6.scn" type="PackedScene" id=2]
 
 [sub_resource type="CapsuleShape" id=1]
 
-radius = 0.56
-height = 1.78
+radius = 0.136459
+height = 1.1907
 
 [node name="char" type="RigidBody" groups=[
 "char",
@@ -16,7 +17,7 @@ input/ray_pickable = true
 input/capture_on_drag = false
 shape_count = 1
 shapes/0/shape = SubResource( 1 )
-shapes/0/transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 1.51033, 0 )
+shapes/0/transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, -0.446681, 0.749021, 0 )
 shapes/0/trigger = false
 collision/layers = 1
 collision/mask = 1
@@ -46,68 +47,33 @@ weapon_range = 20
 weapon_damage = 100
 view_sensitivity = 0.3
 
-[node name="ren" type="TestCube" parent="."]
-
-editor/display_folded = true
-_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 0.67336, 0, 0, 0, 1.625, 0, 0, 0, 0.67336, 0, 1.6, 0 )
-layers = 1
-geometry/visible = true
-geometry/material_override = null
-geometry/cast_shadow = 1
-geometry/receive_shadows = true
-geometry/range_begin = 0.0
-geometry/range_end = 0.0
-geometry/extra_cull_margin = 0.0
-geometry/billboard = false
-geometry/billboard_y = false
-geometry/depth_scale = false
-geometry/visible_in_all_rooms = false
-geometry/use_baked_light = false
-geometry/baked_light_tex_id = 0
-
-[node name="ren1" type="TestCube" parent="ren"]
-
-_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 0, -1.48509 )
-layers = 1
-geometry/visible = true
-geometry/material_override = null
-geometry/cast_shadow = 1
-geometry/receive_shadows = true
-geometry/range_begin = 0.0
-geometry/range_end = 0.0
-geometry/extra_cull_margin = 0.0
-geometry/billboard = false
-geometry/billboard_y = false
-geometry/depth_scale = false
-geometry/visible_in_all_rooms = false
-geometry/use_baked_light = false
-geometry/baked_light_tex_id = 0
-
 [node name="col" type="CollisionShape" parent="."]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 1.51033, 0 )
+transform/local = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, -0.446681, 0.749021, 0 )
 shape = SubResource( 1 )
 trigger = false
 _update_shape_index = 0
 
+[node name="ren" parent="." instance=ExtResource( 2 )]
+
+transform/local = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.446681, 0, 0 )
+
 [node name="cam yaw" type="Spatial" parent="."]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.19891, 0 )
+transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0 )
 
 [node name="cam support" type="Spatial" parent="cam yaw"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0 )
+transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0 )
 
 [node name="camera" type="Camera" parent="cam yaw/cam support"]
 
 editor/display_folded = true
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10.0936 )
+transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.0936 )
 projection = 0
 fov = 65.0
 near = 0.1
@@ -188,15 +154,16 @@ max_lines_visible = -1
 [node name="cam distance" type="RayCast" parent="cam yaw/cam support"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.242371 )
 enabled = true
-cast_to = Vector3( 0, 0, 10 )
+cast_to = Vector3( 0, 0, 2 )
 layer_mask = 1
 type_mask = 15
 
 [node name="shoot ray" type="RayCast" parent="cam yaw/cam support"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, -3 )
+transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -0.548218 )
 enabled = true
 cast_to = Vector3( 0, 0, -1000 )
 layer_mask = 1

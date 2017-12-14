@@ -69,7 +69,7 @@ func _input(event):
 		get_node("cam yaw").set_rotation(Vector3(0, deg2rad(yaw), 0))
 		get_node("cam yaw/cam support").set_rotation(Vector3(deg2rad(pitch), 0, 0))
 		
-		var length = (-pitch + 90)/9
+		var length = (-pitch + 90)/90
 		var ray = get_node("cam yaw/cam support/cam distance")
 		ray.set_cast_to(Vector3(0,0,length))
 		if ray.is_colliding():

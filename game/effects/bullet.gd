@@ -19,4 +19,4 @@ func _fixed_process(delta):
 				pass
 		get_node("../").bullet_hit(get_transform())
 		queue_free()
-	translate(Vector3(0,0,-2))
+	translate(Vector3(0,0,-1))
