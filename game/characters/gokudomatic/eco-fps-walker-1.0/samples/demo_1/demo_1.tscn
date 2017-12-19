@@ -205,8 +205,6 @@ _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 [node name="npc" parent="." instance=ExtResource( 1 )]
 
 transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.27983, 0 )
-max_speed_accel = 1.01
-turn_speed_deccel = 1
 target = NodePath("../target")
 
 [node name="TestCube" type="TestCube" parent="npc"]
@@ -249,6 +247,7 @@ geometry/baked_light_tex_id = 0
 
 [node name="StaticBody" type="StaticBody" parent="."]
 
+editor/display_folded = true
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 input/ray_pickable = true
 input/capture_on_drag = false

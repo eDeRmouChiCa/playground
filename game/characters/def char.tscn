@@ -17,7 +17,7 @@ input/ray_pickable = true
 input/capture_on_drag = false
 shape_count = 1
 shapes/0/shape = SubResource( 1 )
-shapes/0/transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, -0.446681, 0.749021, 0 )
+shapes/0/transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 0.725525, 0 )
 shapes/0/trigger = false
 collision/layers = 1
 collision/mask = 1
@@ -50,30 +50,24 @@ view_sensitivity = 0.3
 [node name="col" type="CollisionShape" parent="."]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, -0.446681, 0.749021, 0 )
+transform/local = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 0.725525, 0 )
 shape = SubResource( 1 )
 trigger = false
 _update_shape_index = 0
 
-[node name="ren" parent="." instance=ExtResource( 2 )]
-
-transform/local = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.446681, 0, 0 )
-
 [node name="cam yaw" type="Spatial" parent="."]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0 )
 
 [node name="cam support" type="Spatial" parent="cam yaw"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0 )
+transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, 0 )
 
 [node name="camera" type="Camera" parent="cam yaw/cam support"]
 
-editor/display_folded = true
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.0936 )
+transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2 )
 projection = 0
 fov = 65.0
 near = 0.1
@@ -129,10 +123,10 @@ focus/ignore_mouse = true
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 0
-margin/left = 2.0
-margin/top = 2.0
-margin/right = 42.0
-margin/bottom = 16.0
+margin/left = 10.0
+margin/top = 20.0
+margin/right = 50.0
+margin/bottom = 34.0
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
@@ -143,10 +137,10 @@ focus/ignore_mouse = true
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 0
-margin/left = 12.0
-margin/top = 46.0
-margin/right = 52.0
-margin/bottom = 60.0
+margin/left = 10.0
+margin/top = 40.0
+margin/right = 50.0
+margin/bottom = 54.0
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
@@ -154,7 +148,6 @@ max_lines_visible = -1
 [node name="cam distance" type="RayCast" parent="cam yaw/cam support"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.242371 )
 enabled = true
 cast_to = Vector3( 0, 0, 2 )
 layer_mask = 1
@@ -163,10 +156,14 @@ type_mask = 15
 [node name="shoot ray" type="RayCast" parent="cam yaw/cam support"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -0.548218 )
+transform/local = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.440183, 0.0418617, -0.548218 )
 enabled = true
 cast_to = Vector3( 0, 0, -1000 )
 layer_mask = 1
 type_mask = 15
+
+[node name="ren" parent="cam yaw" instance=ExtResource( 2 )]
+
+transform/local = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
 
 
